@@ -4,32 +4,37 @@ import re
 
 
 
-def readSeconds(line, index) :
+def readSeconds(line, index, delay) :
     
     hours = int(line[index:index+2])
     minutes = int(line[index+3:index+5])
     seconds = int(line[index+6:index+8])
     
-    return seconds + minutes*60 + hours*360
+    time = seconds + minutes*60 + hours*3600 + delay;
+
+    if time < 0 :
+        time = 0;
+
+    return time;
     
 def addDelay(line, delay) :
     
-    seconds = readSeconds(line, 0)
+    
 
     
-    seconds_a = readSeconds(line, 0)
-    seconds_a = seconds_a + delay;
+    seconds_a = readSeconds(line, 0, delay)
+    
 
-    hours_a = seconds_a // 360
-    minutes_a   = seconds_a // 60
+    hours_a = seconds_a // 3600
+    minutes_a   = (seconds_a % 3600) // 60
     secs_a = seconds_a % 60
     
 
-    seconds_b = readSeconds(line, 0)
-    seconds_b = seconds_b + delay;
+    seconds_b = readSeconds(line, 17, delay)
+    
 
-    hours_b = seconds_b // 360
-    minutes_b   = seconds_b // 60
+    hours_b = seconds_b // 3600
+    minutes_b   = (seconds_b % 3600) // 60
     secs_b = seconds_b % 60
 
     return f"{hours_a:02}:{minutes_a:02}:{secs_a:02},{line[9:12]} --> {hours_b:02}:{minutes_b:02}:{secs_b:02},{line[26:29]}\n"
